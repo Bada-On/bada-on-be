@@ -1,4 +1,4 @@
-package goorm.badaon.domain.weather;
+package goorm.badaon.domain.shortweather;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,10 +19,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Weather {
-
+public class ShortWeather {
+	
 	@Id
-	@Column(name = "weather_id")
+	@Column(name = "short_weather_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
@@ -35,24 +35,6 @@ public class Weather {
 
 	@Column(name = "weather_time")
 	private LocalTime weatherTime;
-
-	@Column(name = "sun_rise_time")
-	private LocalTime sunRiseTime;
-
-	@Column(name = "sun_set_time")
-	private LocalTime sunSetTime;
-
-	@Column(name = "high_tide_1")
-	private int highTide1;
-
-	@Column(name = "low_tide_1")
-	private int LowTide1;
-
-	@Column(name = "high_tide_2")
-	private int highTide2;
-
-	@Column(name = "low_tide_2")
-	private int LowTide2;
 
 	@Column(name = "cloud")
 	private int cloud;
@@ -68,5 +50,4 @@ public class Weather {
 
 	@Column(name = "visible_distance")
 	private int visibleDistance;
-
 }

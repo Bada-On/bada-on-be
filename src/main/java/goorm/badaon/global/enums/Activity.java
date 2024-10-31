@@ -1,5 +1,8 @@
 package goorm.badaon.global.enums;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 import lombok.Getter;
 
 @Getter
@@ -16,5 +19,12 @@ public enum Activity {
 
 	Activity(String value) {
 		this.value = value;
+	}
+
+	public static Activity fromString(String value) {
+		return Arrays.stream(Activity.values())
+			.filter(e -> e.getValue().equals(value))
+			.findFirst()
+			.orElseThrow(IllegalArgumentException::new);
 	}
 }

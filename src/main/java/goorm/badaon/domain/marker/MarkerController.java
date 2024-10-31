@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import goorm.badaon.domain.marker.dto.MarkerDetailResponse;
@@ -23,8 +24,8 @@ public class MarkerController {
 
 	@GetMapping
 	public ResponseEntity<List<MarkerResponse>> getMarkerList() {
-		List<MarkerResponse> markers = markerService.getAllMarkers();
-		return new ResponseEntity<>(markers, HttpStatus.OK);
+		List<MarkerResponse> response = markerService.getAllMarkers();
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@GetMapping("/summary/{id}")
@@ -36,6 +37,12 @@ public class MarkerController {
 	@GetMapping("/details/{id}")
 	public ResponseEntity<MarkerDetailResponse> getMarkerDetails(@PathVariable("id") Long id) {
 		MarkerDetailResponse response = markerService.getDetails(id);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@GetMapping("/find")
+	public ResponseEntity<List<MarkerResponse>> findMarkers(@RequestParam("activity") String activity) {
+		List<MarkerResponse> response = markerService.findByActivity(activity);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

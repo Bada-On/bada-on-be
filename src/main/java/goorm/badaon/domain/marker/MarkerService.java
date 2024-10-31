@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import goorm.badaon.domain.marker.dto.MarkerDetailResponse;
 import goorm.badaon.domain.marker.dto.MarkerResponse;
+import goorm.badaon.domain.marker.dto.MarkerResponse;
 import goorm.badaon.domain.marker.dto.MarkerSummaryResponse;
 import goorm.badaon.global.enums.Activity;
 
@@ -69,6 +70,31 @@ public class MarkerService {
 			.id(id)
 			.message("이부분 아직 뭘놔야될지 모르겠어욥.")
 			.build();
+	}
+
+	public List<MarkerResponse> findByActivity(String activity) {
+		Activity.fromString(activity);
+
+		List<MarkerResponse> markerResponses = new ArrayList<>();
+		MarkerResponse dummy1 = MarkerResponse.builder()
+			.id(1L)
+			.name("김녕 세기알 해변")
+			.latitude(33.558767)
+			.longitude(126.755011)
+			.activity(Activity.DIVING.getValue())
+			.build();
+		markerResponses.add(dummy1);
+
+		MarkerResponse dummy2 = MarkerResponse.builder()
+			.id(2L)
+			.name("구두미 포구")
+			.latitude(33.236824)
+			.longitude(126.596474)
+			.activity(Activity.DIVING.getValue())
+			.build();
+		markerResponses.add(dummy2);
+
+		return markerResponses;
 	}
 }
 

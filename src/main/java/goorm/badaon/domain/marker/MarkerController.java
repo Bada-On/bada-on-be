@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import goorm.badaon.domain.marker.dto.MakerSummaryResponseV2;
 import goorm.badaon.domain.marker.dto.MarkerDetailResponse;
 import goorm.badaon.domain.marker.dto.MarkerResponse;
 import goorm.badaon.domain.marker.dto.MarkerSummaryResponse;
@@ -29,8 +30,8 @@ public class MarkerController {
 	}
 
 	@GetMapping("/summary/{id}")
-	public ResponseEntity<MarkerSummaryResponse> getMarkerSummary(@PathVariable("id") Long id) {
-		MarkerSummaryResponse response = markerService.getSummary(id);
+	public ResponseEntity<List<MakerSummaryResponseV2>> getMarkerSummary(@PathVariable("id") Long id) {
+		List<MakerSummaryResponseV2> response = markerService.getSummary(id);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

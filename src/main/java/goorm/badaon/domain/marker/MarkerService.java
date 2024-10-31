@@ -6,17 +6,15 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import goorm.badaon.domain.dayweather.DayWeather;
 import goorm.badaon.domain.dayweather.DayWeatherRepository;
+import goorm.badaon.domain.marker.dto.MakerSummaryResponseV2;
 import goorm.badaon.domain.marker.dto.MarkerDetailResponse;
 import goorm.badaon.domain.marker.dto.MarkerResponse;
-import goorm.badaon.domain.marker.dto.MarkerSummaryResponse;
 import goorm.badaon.domain.shortweather.ShortWeather;
 import goorm.badaon.domain.shortweather.ShortWeatherRepository;
 import goorm.badaon.global.enums.Activity;
@@ -63,7 +61,8 @@ public class MarkerService {
 		return markerResponses;
 	}
 
-	public MarkerSummaryResponse getSummary(Long id) {
+	public List<MakerSummaryResponseV2> getSummary(Long id) {
+		List<MakerSummaryResponseV2> markerSummaryResponses = new ArrayList<>();
 
 		Marker marker = markerRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 		Activity activity = marker.getActivity();
@@ -71,12 +70,13 @@ public class MarkerService {
 		List<DayWeather> dayWeathers = dayWeatherRepository.findAll();
 		List<ShortWeather> shortWeathers = shortWeatherRepository.findAll();
 
-		MarkerSummaryResponse markerSummaryResponse = MarkerSummaryResponse.builder()
-			.id(id)
-			.markerName(marker.getName())
-			.activity(activity)
-			.build();
+		// MarkerSummaryResponse markerSummaryResponse = MarkerSummaryResponse.builder()
+		// 	.id(id)
+		// 	.markerName(marker.getName())
+		// 	.activity(activity)
+		// 	.build();
 
+		int counter = 0;
 		for (ShortWeather shortWeather : shortWeathers) {
 			int hazardScore = 0;
 			for (DayWeather dayWeather : dayWeathers) {
@@ -91,14 +91,25 @@ public class MarkerService {
 						case PHOTO_SHOOTING:
 							hazardScore += calculatePhotoShootHazardScore(dayWeather, shortWeather);
 							break;
+						default:
+							hazardScore = 10;
+							break;
 					}
 				}
 			}
-			markerSummaryResponse.addRecommendScores("메시지 템플릿 정해야됩니다...", hazardScore,
-				shortWeather.getWeatherTime().getHour(), shortWeather.getWeatherDate());
+			// markerSummaryResponse.addRecommendScores("메시지 템플릿 정해야됩니다...", hazardScore,
+			// 	shortWeather.getWeatherTime().getHour(), shortWeather.getWeatherDate());
+			MakerSummaryResponseV2 makerSummaryResponseV2 = MakerSummaryResponseV2.builder()
+				.id(id)
+				.score(hazardScore)
+				.hour(counter)
+				.build();
+			makerSummaryResponseV2.addFeedback(activity.getValue(), "잔잔한 파도로 편안하게 즐기기 좋아요.");
+			markerSummaryResponses.add(makerSummaryResponseV2);
+			counter++;
 		}
 
-		return markerSummaryResponse;
+		return markerSummaryResponses;
 	}
 
 	public List<MarkerDetailResponse> getDetails(Long id) {
@@ -119,26 +130,20 @@ public class MarkerService {
 	}
 
 	public List<MarkerResponse> findByActivity(String activity) {
-		fromString(activity);
+		Activity activityEnum = fromString(activity);
+		List<Marker> all = markerRepository.findAllByActivity(activityEnum);
 
 		List<MarkerResponse> markerResponses = new ArrayList<>();
-		MarkerResponse dummy1 = MarkerResponse.builder()
-			.id(1L)
-			.name("김녕 세기알 해변")
-			.latitude(33.558767)
-			.longitude(126.755011)
-			.activity(DIVING.getValue())
-			.build();
-		markerResponses.add(dummy1);
-
-		MarkerResponse dummy2 = MarkerResponse.builder()
-			.id(2L)
-			.name("구두미 포구")
-			.latitude(33.236824)
-			.longitude(126.596474)
-			.activity(DIVING.getValue())
-			.build();
-		markerResponses.add(dummy2);
+		for (Marker marker : all) {
+			MarkerResponse markerResponse = MarkerResponse.builder()
+				.id(marker.getId())
+				.name(marker.getName())
+				.latitude(marker.getLatitude())
+				.longitude(marker.getLongitude())
+				.activity(activityEnum.getValue())
+				.build();
+			markerResponses.add(markerResponse);
+		}
 
 		return markerResponses;
 	}

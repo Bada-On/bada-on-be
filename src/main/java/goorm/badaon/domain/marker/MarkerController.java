@@ -35,8 +35,9 @@ public class MarkerController {
 	}
 
 	@GetMapping("/details/{id}")
-	public ResponseEntity<MarkerDetailResponse> getMarkerDetails(@PathVariable("id") Long id) {
-		MarkerDetailResponse response = markerService.getDetails(id);
+	public ResponseEntity<List<MarkerDetailResponse>> getMarkerDetails(@PathVariable("id") Long id) {
+		List<MarkerDetailResponse> response = markerService.getDetails(id);
+
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

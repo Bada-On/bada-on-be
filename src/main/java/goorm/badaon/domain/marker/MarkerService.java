@@ -1,5 +1,7 @@
 package goorm.badaon.domain.marker;
 
+import static goorm.badaon.global.enums.Activity.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,7 +28,7 @@ public class MarkerService {
 			.name("김녕 세기알 해변")
 			.latitude(33.558767)
 			.longitude(126.755011)
-			.activity(Activity.DIVING.getValue())
+			.activity(DIVING.getValue())
 			.build();
 		markerResponses.add(dummy1);
 
@@ -35,7 +37,7 @@ public class MarkerService {
 			.name("서빈백사 해수욕장")
 			.latitude(33.502570)
 			.longitude(126.942960)
-			.activity(Activity.SNORKELING.getValue())
+			.activity(SNORKELING.getValue())
 			.build();
 		markerResponses.add(dummy2);
 
@@ -44,7 +46,7 @@ public class MarkerService {
 			.name("섭지코지")
 			.latitude(33.424758)
 			.longitude(126.931019)
-			.activity(Activity.PHOTO_SHOOTING.getValue())
+			.activity(PHOTO_SHOOTING.getValue())
 			.build();
 		markerResponses.add(dummy3);
 
@@ -65,15 +67,26 @@ public class MarkerService {
 			.build();
 	}
 
-	public MarkerDetailResponse getDetails(Long id) {
-		return MarkerDetailResponse.builder()
-			.id(id)
-			.message("이부분 아직 뭘놔야될지 모르겠어욥.")
-			.build();
+	public List<MarkerDetailResponse> getDetails(Long id) {
+
+		List<MarkerDetailResponse> detailResponseList = new ArrayList<>();
+
+		for (int i = 0; i < 24; i++) {
+			MarkerDetailResponse detailResponse = MarkerDetailResponse.builder()
+				.id(id)
+				.score(11)
+				.hour(i)
+				.build();
+			detailResponse.addFeedback(SNORKELING.getValue(), "맑은 시야덕분에 강력하게 추천!");
+			detailResponse.addFeedback(SWIMMING.getValue(), "잔잔한 파도로 편안하게 즐기기 좋아요.");
+			detailResponseList.add(detailResponse);
+		}
+
+		return detailResponseList;
 	}
 
 	public List<MarkerResponse> findByActivity(String activity) {
-		Activity.fromString(activity);
+		fromString(activity);
 
 		List<MarkerResponse> markerResponses = new ArrayList<>();
 		MarkerResponse dummy1 = MarkerResponse.builder()
@@ -81,7 +94,7 @@ public class MarkerService {
 			.name("김녕 세기알 해변")
 			.latitude(33.558767)
 			.longitude(126.755011)
-			.activity(Activity.DIVING.getValue())
+			.activity(DIVING.getValue())
 			.build();
 		markerResponses.add(dummy1);
 
@@ -90,7 +103,7 @@ public class MarkerService {
 			.name("구두미 포구")
 			.latitude(33.236824)
 			.longitude(126.596474)
-			.activity(Activity.DIVING.getValue())
+			.activity(DIVING.getValue())
 			.build();
 		markerResponses.add(dummy2);
 

@@ -5,8 +5,7 @@ spring:
     url: ${DATABASE_URL}?allowPublicKeyRetrieval=true&useSSL=false
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
-    password: root
-
+    password: 1234
   #    url: jdbc:mariadb://localhost:3306/badaon
   #    username: root
   #    password: 1234
@@ -21,16 +20,6 @@ spring:
   #      enabled: true
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     #      ddl-auto: create
     open-in-view: false
-    properties:
-      hibernate:
-        format_sql: true
-  output:
-    ansi:
-      enabled: always
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.type.descriptor.sql: trace
